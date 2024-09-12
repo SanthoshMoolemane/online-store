@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import StoreItemList from './components/StoreItemList';
+import CheckoutForm from './components/CheckoutForm';
+import OrderConfirmation from './components/OrderConfirmation';
 
 function App() {
+  const [page, setPage] = useState(1);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [orderDetails, setOrderDetails] = useState<any>(null);
+
+  const handleBuy = (item: any) => {
+    setSelectedItem(item);
+    setPage(2);
+  };
+
+  const handleOrderSubmit = (details: any) => {
+    setOrderDetails(details);
+    setPage(3);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app-container'>
+      {page === 1 && <StoreItemList onBuy={handleBuy} />}
+      {page === 2 && <CheckoutForm selectedItem={selectedItem} onSubmit={handleOrderSubmit} />}
+      {page === 3 && <OrderConfirmation order={orderDetails} />}
     </div>
   );
 }
